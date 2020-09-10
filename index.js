@@ -1,4 +1,4 @@
-   var svg = d3.select("svg"),
+var svg = d3.select("svg"),
     width = svg.attr("width"),
     height = svg.attr("height");
 
@@ -13,7 +13,7 @@ var simulation = d3.forceSimulation()
     .force("charge", d3.forceManyBody())
     .force("center", d3.forceCenter(width / 2, height / 2));
 
-d3.json("BLM_Graph.json", function(error, graph) {
+d3.json("BLM_network_final.json", function(error, graph) {
   if (error) throw error;
 
   var link = svg.append("g")
@@ -29,7 +29,9 @@ d3.json("BLM_Graph.json", function(error, graph) {
     .data(graph.nodes)
     .enter().append("circle")
     .attr("r", scaledSize)
-    .attr("fill", function(d) { return color(d.degree); })
+//    .attr("fill", function(d) { return color(d.degree); })
+    .attr("fill", function(d) { return color(d.group); })
+
     .on("mouseover", mouseOver(.7))
     .on("mouseout", mouseOut)
     .call(d3.drag()
@@ -45,13 +47,13 @@ d3.json("BLM_Graph.json", function(error, graph) {
     .links(graph.links);
 
   svg.selectAll("circle").on("click", function(d){
-    let name = "Words: " + d.name.toUpperCase();
+    let name = "Words: " + d.id.toUpperCase();
     let string = "Connections: ";
 
     Object.keys(linkedByIndex[d.index]).forEach(key => {
       for(n of graph.nodes) {
-        if(n.index == key && n.name != undefined) {
-          string += (n.name.toUpperCase() + ", ");
+        if(n.index == key && n.id != undefined) {
+          string += (n.id.toUpperCase() + ", ");
         }
       }
     });
@@ -102,7 +104,7 @@ d3.json("BLM_Graph.json", function(error, graph) {
   }
 
   function scaledSize(d) {
-    return d.degree * 0.5;
+    return d.degree * 0.8;
   }
 
   function mouseOver(opacity) {
@@ -114,7 +116,7 @@ d3.json("BLM_Graph.json", function(error, graph) {
           .duration(200)
           .style("opacity", .9);
 
-        div.html(d.name)
+        div.html(d.id)
           .style("left", (d3.event.pageX) + "px")
           .style("top", (d3.event.pageY - 28) + "px");
 
