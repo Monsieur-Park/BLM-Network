@@ -1,12 +1,18 @@
 var svg = d3.select("svg"),
-    width = svg.attr("width"),
-    height = svg.attr("height");
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
+
+svg.call(d3.zoom().on('zoom', zoomed));
+
 
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 
 var div = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
+
+var container = svg.append('g');
+
 
 var simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function(d) { return d.id; }))
@@ -172,4 +178,8 @@ function dragended(d) {
   if (!d3.event.active) simulation.alphaTarget(0);
   d.fx = null;
   d.fy = null;
+}
+
+function zoomed() {
+	  container.attr("transform", "translate(" + d3.event.transform.x + ", " + d3.event.transform.y + ") scale(" + d3.event.transform.k + ")");
 }
