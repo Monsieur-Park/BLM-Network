@@ -5,11 +5,15 @@ var svg = d3.select("svg"),
 svg.call(d3.zoom().on('zoom', zoomed));
 
 
+
+
+
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 
 var div = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
+
 
 var container = svg.append('g');
 
@@ -17,23 +21,35 @@ var container = svg.append('g');
 var simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function(d) { return d.id; }))
     .force("charge", d3.forceManyBody())
+//    .force("charge", d3.forceManyBody().strength([-120]).distanceMax([500]))
+
     .force("center", d3.forceCenter(width / 2, height / 2));
 
-d3.json("BLM_Graph.json", function(error, graph) {
+
+
+
+function scaledSize(d) {
+          return d.degree * 0.9;
+        }
+
+
+
+d3.json("BLM_network_final.json", function(error, graph) {
   if (error) throw error;
 
-  var link = svg.append("g")
+  var link = container.append("g")
     .attr("class", "links")
     .selectAll("line")
     .data(graph.links)
     .enter().append("line")
     .attr("stroke-width", function(d) { return Math.sqrt(d.value); });
 
-  var node = svg.append("g")
+  var node = container.append("g")
     .attr("class", "nodes")
     .selectAll("circle")
     .data(graph.nodes)
     .enter().append("circle")
+
     .attr("r", scaledSize)
 //    .attr("fill", function(d) { return color(d.degree); })
     .attr("fill", function(d) { return color(d.group); })
@@ -51,6 +67,8 @@ d3.json("BLM_Graph.json", function(error, graph) {
 
   simulation.force("link")
     .links(graph.links);
+
+
 
   svg.selectAll("circle").on("click", function(d){
     let name = "Words: " + d.id.toUpperCase();
@@ -71,6 +89,8 @@ d3.json("BLM_Graph.json", function(error, graph) {
     connections.innerHTML = string;
   });
 
+
+
   function ticked() {
     link
       .attr("x1", function(d) { return d.source.x; })
@@ -82,6 +102,7 @@ d3.json("BLM_Graph.json", function(error, graph) {
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; });
   }
+
 
   var linkedByIndex = {};
   var nodeDegrees = {};
@@ -109,9 +130,7 @@ d3.json("BLM_Graph.json", function(error, graph) {
     }
   }
 
-  function scaledSize(d) {
-    return d.degree * 0.8;
-  }
+
 
   function mouseOver(opacity) {
     return function(d) {
@@ -180,6 +199,9 @@ function dragended(d) {
   d.fy = null;
 }
 
+
+
+// Zooming function translates the size of the svg container.
 function zoomed() {
 	  container.attr("transform", "translate(" + d3.event.transform.x + ", " + d3.event.transform.y + ") scale(" + d3.event.transform.k + ")");
 }
