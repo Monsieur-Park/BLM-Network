@@ -34,7 +34,7 @@
   
   
   
-  d3.json("BLM_Graph_Network.json", function(error, graph) {
+  d3.json("BLM_Graph.json", function(error, graph) {
     if (error) throw error;
   
     var link = container.append("g")
