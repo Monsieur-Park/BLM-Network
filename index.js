@@ -123,7 +123,8 @@
 		.attr('value', function(d) { return d.split(' ')[0].toLowerCase(); })
 		.text(function(d) { return d; });
 
-
+	});
+	
 
   
     var linkedByIndex = {};
