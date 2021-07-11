@@ -16,14 +16,14 @@ body {
   stroke-width: 1.5px;
 }
 
-#tools div { 
+#tools div {
 	float: right;
 	display: inline;
 }
-	
+
 form { display: inline; }
-  
-  
+
+
 div.tooltip {
     position: absolute;
     text-align: center;
@@ -37,13 +37,19 @@ div.tooltip {
     pointer-events: none;
 }
 
+.label {
+  font-family: "Roboto", Roboto, sans-serif;
+  font: "Roboto", sans-serif;
+  pointer-events: none;
+}
+
 </style>
 <body>
   <h1>Tweets Blacklives Matter</h1>
   <p id='word'>Words: ... </p>
   <p id='connection'>Connections: ... </p>
-  <div id='tools'></div>	
-  <svg width=940 height=940></svg>
+  <div id='tools'></div>
+  <svg width=1040 height=940></svg>
   <p></p>
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
